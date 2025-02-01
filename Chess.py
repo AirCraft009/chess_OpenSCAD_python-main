@@ -1,5 +1,6 @@
 import numpy as np
 from Piece import Piece, knight
+import random
 
 board = {x: 0 for x in range(64)}
 #it is split up to number of field: piece on field
@@ -91,34 +92,36 @@ def fill_board():
     for x in range(64):
         if board[x] != 0:
             if board[x] == 2:
-                white_pieces[x] = Piece(True, True, False, False, False, 1, 1, x)
+                white_pieces[x] = Piece(True, True, False, False, False, 1, 1, 2, x)
             elif board[x] == 3:
-                black_pieces[x] = Piece(False, True, False, False, False, 1, 1, x)
+                black_pieces[x] = Piece(False, True, False, False, False, 1, 1, 3, x)
             elif board[x] == 4:
-                white_pieces[x] = knight(True, 3, x)
+                white_pieces[x] = knight(True, 3, 4, x)
                 #knight
                 # white_pieces[x] = Piece(True, False, False, False, False, 1, 1, x)
             elif board[x] == 5:
-                black_pieces[x] = knight(False, 3, x)
+                black_pieces[x] = knight(False, 3, 5, x)
                 #knight
                 # white_pieces[x] = Piece(True, True, False, False, False, 1, 1, x)
             elif board[x] == 8:
-                white_pieces[x] = Piece(True, False, False, False, True, 3, 8, x)
+                white_pieces[x] = Piece(True, False, False, False, True, 3, 8, 8,x)
             elif board[x] == 9:
-                black_pieces[x] = Piece(False, False, False, False, True, 3, 8, x)
+                black_pieces[x] = Piece(False, False, False, False, True, 3, 8, 9, x)
             elif board[x] == 16:
-                white_pieces[x] = Piece(True, True, True, True, False, 5, 8, x)
+                white_pieces[x] = Piece(True, True, True, True, False, 5, 8, 16, x)
             elif board[x] == 17:
-                black_pieces[x] = Piece(False, True, True, True, False, 5, 8, x)
+                black_pieces[x] = Piece(False, True, True, True, False, 5, 8, 17, x)
             elif board[x] == 32:
-                white_pieces[x] = Piece(True, True, True, True, True, 9, 8, x)
+                white_pieces[x] = Piece(True, True, True, True, True, 9, 8, 32, x)
             elif board[x] == 33:
-                black_pieces[x] = Piece(False, True, True, True, True, 9, 8, x)
+                black_pieces[x] = Piece(False, True, True, True, True, 9, 8, 33, x)
             elif board[x] == 64:
-                white_pieces[x] = Piece(True, True, False, False, False, 20, 1, x)
+                white_pieces[x] = Piece(True, True, False, False, False, 20, 1, 64, x)
             elif board[x] == 65:
-                black_pieces[x] = Piece(False, True, False, False, False, 1, 1, x)
-            
+                black_pieces[x] = Piece(False, True, False, False, False, 1, 1, 65, x)
+
+def visualise_fen():
+    pass          
             
 class ChessBot():
     
@@ -131,8 +134,46 @@ class ChessBot():
         self.capture_material = 0 
         self.material = 0
         
-    def Generate_move(self):
         
+    def calc_material(self):
+        for mat in self.pieces:
+            self.material += self.pieces[mat].points*100
+        return self.material
+            
+    def move_random(self):
+        itemlist = []
+        if len(self.possible_moves) == 0:
+            self.Generate_move(1)
+        
+        for item in self.possible_moves.items():
+            itemlist.append(item)
+            
+        rand_piece_key, possible_spaces = random.choice(itemlist)
+        selected_space = random.choice(possible_spaces)
+        
+        # Remove the piece from its current location on the board
+        board.pop(selected_space)
+        pos = rand_piece_key.space
+        self.pieces.pop(pos)
+        
+        
+        # Update the piece's space
+        
+        self.pieces[selected_space] = rand_piece_key
+        
+        # Place the piece at its new location on the board
+        board[selected_space] = self.pieces[selected_space].index
+        
+        # Update white pieces if the piece is white
+        if self.white:
+            white_pieces = self.pieces
+        else:
+            black_pieces = self.pieces
+                            
+    def Generate_move(self, depth):
+        if depth == 0:
+            return 1
+        depth -= 1
         moves = []
         for x in self.pieces:
             moves = []
@@ -143,8 +184,8 @@ class ChessBot():
                 for i in range(piece.stepsize):
                     target = piece.move_up(target )
                     if type(target) == int:
-                        if piece.stepsize == 1:
-                            print("Pawn")
+                        # if piece.stepsize == 1:
+                            # print("Pawn")
                         if board[target] == 0:
                             moves.append(target) 
                             
@@ -152,45 +193,32 @@ class ChessBot():
                             break
                         
                         else:
-                            self.possible_moves[piece] = target
+                            moves.append(target)
                             self.capture_material += board[target] * 100
+                        self.possible_moves[piece] = moves
                     elif type(piece) == knight:
-                        print("knight")
+                        # print("knight")
                         n_moves = piece.move_knight()
-                        for move in n_moves:
+                        for i, move in enumerate(n_moves):
                             if board[move] == 0:
                                 self.possible_moves[piece] = n_moves
-                                break 
+                                 
                                 
                             elif board[move] % 2 == piece_num % 2:
-                                continue
+                                n_moves.pop(i)
                             
                             else:
-                                self.possible_moves[move] = n_moves
+                                self.possible_moves[piece] = n_moves
                                 self.capture_material += board[move] * 100
                                 break
-                                
-            self.possible_moves[piece] = moves
-                                
                         
+                            
+        # self.move_random()                                
+        self.Generate_move(depth)
         return self.possible_moves
                                 
                             
-        """if piece.move_down():
-                        self.possible_moves.append()
-                    if piece.move_left():
-                        self.possible_moves.append()
-                    if piece.move_right():
-                        self.possible_moves.append()
-                    if piece.move_up_left():
-                        self.possible_moves.append()
-                    if piece.move_up_right():
-                        self.possible_moves.append()
-                    if piece.move_down_left():
-                        self.possible_moves.append()
-                    if piece.move_down_right():
-                        self.possible_moves.append()
-                """    
+            
                     
         
         
@@ -204,6 +232,12 @@ if __name__ == "__main__":
         return board
     fill_board()
     white_bot = ChessBot(True, white_pieces)
-    print(white_bot.Generate_move())
-    print(white_bot.capture_material)
+    # print(white_bot.Generate_move(2))
+    # print(white_bot.capture_material)
+    # print(white_bot.calc_material())
+    white_bot.Generate_move(1)
+    # print(board)
+    white_bot.move_random()
+    print("-------------------")
+    print(board)
         

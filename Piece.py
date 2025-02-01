@@ -9,6 +9,7 @@ class Piece():
                  diagonal: bool,
                  points: int,
                  step_size: int,
+                 index : int,
                  space = None):
         
             self.white = white
@@ -20,6 +21,7 @@ class Piece():
             self.diagonal = diagonal
             self.space = space
             self.stepsize = step_size
+            self.index = index
             
         def move_up(self, space):
             if self.up and space < 56:
@@ -66,8 +68,10 @@ class knight(Piece):
     def __init__(self, 
                  white: bool,
                  points: int,
+                 index: int,
                  space = None):
-        super().__init__(white, False, False, False, False, points, 1, space)
+
+        super().__init__(white, False, False, False, False, points, 1, index, space)
         
         
     
