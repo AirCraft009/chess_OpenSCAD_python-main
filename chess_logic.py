@@ -3,7 +3,8 @@ import solid.utils
 import Chess
 
 board_theory = Chess.read_Fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
-print(board_theory)
+
+# print(board_theory)
 Chess.fill_board()
 white, black = Chess.white_pieces, Chess.black_pieces
 out = "Output.scad"
@@ -15,9 +16,10 @@ king = solid.import_scad("king.scad")
 queen = solid.import_scad("queen.scad")
 bishop = solid.import_scad("bishop.scad")
 white_pawn = bauer.white_pawn()
-board_main = board.checkerboard( 7, 7, True)
+board_main = solid.translate([0,0,-3])(board.checkerboard( 7, 7, True))
 def fill_board_3d():
     for x in range(64):
+        # print(board_theory[x])
         if board_theory[x] != 0:
             if board_theory[x] == 2:
                 white[x] = bauer.white_pawn()
@@ -43,24 +45,62 @@ def fill_board_3d():
                 white[x] = king.king()
             elif board_theory[x] == 65:
                 black[x] = king.king()
-    return white, black
+    
+    return board_theory
 
-def make_scene():
+
+"""def make_scene():
     fill_board_3d()
     main_l = []
-    for x in black:
-        x_tranlated_piece = solid.translate([75, 5*x*10, 0])(black[x])
-        main_l.append(x_tranlated_piece)
-        
-        
+    start_L = []
     
-    scene = [board_main + x 
-    return 
+    
+    for i, x in enumerate(black):
+        
+        x_tranlated_piece = solid.translate([0, 0, 0])(black[x])
+        start_L.append(x_tranlated_piece)
+    
+    for i in range(2):
+        for x in range(8):
+            main_l.append(solid.translate([i*10, x*10, 0 ])(start_L[x*(i+1)]))
+        
+    main_l.reverse()   
+    # print(start_L)
+    
+    scene = board_main + main_l
+    return scene"""
+
+
+
+def test():
+    board_theory = fill_board_3d()
+    # print(white)
+    start = [0,0,0]
+    pieces = []
+    shifted_corr = []
+    for piece in white:
+        pieces.append(solid.translate([5,5,0])(white[piece]))
+        
+    for piece in black:
+        pieces.append(solid.translate([5,5,0])(black[piece]))
+    print(board_theory)
+    c = 0
+    d = 0
+    for x in range (8):
+        for i in range(8):
+            if board_theory[d] != 0:
+                shifted_corr.append(solid.translate([10*i, 10*x, 0])(pieces[c]))
+                
+                c += 1
+            d += 1
+    scene = board_main + shifted_corr
+    return scene
+            
+            
 
 
     
 
 
-solid.scad_render_to_file(make_scene(), out)
-
+solid.scad_render_to_file(test(), out)
 
