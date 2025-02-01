@@ -2,11 +2,12 @@ import numpy as np
 import itertools
 
 chess_spaces = np.empty((8,8,2), int)
+print(chess_spaces)
 for x in range(8):
     for y in range(8):
         chess_spaces[x, y] = [x+1, y+1]
 
-# print(chess_spaces)
+# 
 
 
 chess_figures = np.array([
@@ -96,13 +97,22 @@ class queen(piece):
         return moves
 
     def get_diagonals_left(self):
-        board = chess_spaces
-        pos = self.space
-        downshift = 8 - pos[1]
+        board = chess_spaces  # Assuming chess_spaces is the board representation
+        pos = self.space  # pos should be a tuple like (x, y)
+        downshift = -1
+
+        # Adjust downshift based on specific position logic
+        if pos[0] == 1 or pos[0] == 8:
+            downshift = 0
+        
+        # Calculate starting position for diagonal move
         downshift_pos = (pos[0] - downshift, pos[1] + downshift) 
+        
         moves = []
 
-        if np.array_equal(pos, [1, 1]) or np.array_equal(pos, [8, 8]):
+        # Avoid unnecessary conditions for specific positions
+        # You can remove or modify this based on your game rules
+        if pos == [1, 1] or pos == [8, 8]:
             return moves
 
         for x in range(8):
@@ -111,11 +121,13 @@ class queen(piece):
             if new_y < 0:
                 break
             if 0 <= new_x < 8 and 0 <= new_y < 8:
-                moves.append(board[new_x, new_y])
+                moves.append(board[new_y, new_x])
+        
         return moves
+
                
-            
-    def get_moves(self):
+    """
+      def get_moves(self):
         for item in self.get_rows():
             for under in item:
                 self.technical_range.append(under)
@@ -125,10 +137,8 @@ class queen(piece):
                     for idk in under:
                         self.technical_range.append(idk)
             
-        for item in self.get_diagonals_right():
-            for under in item:
-                self.technical_range.append(under)
-                
+        for item in self.get_diagonals_right(under):
+                pass
         for item in self.get_diagonals_left():
             for under in item:
                 self.technical_range.append(under)
@@ -142,6 +152,8 @@ class queen(piece):
         self.technical_range = x
         # print(self.technical_range)
         return self.technical_range
+           
+    
     
     
 class king(piece):
@@ -295,7 +307,7 @@ class bishop(piece):
                 x.append(col_Row)
             self.technical_range.clear()
             self.technical_range = x
-            print(self.technical_range)    
+            # print(self.technical_range)    
             return self.technical_range
         
 
@@ -305,11 +317,11 @@ class bishop(piece):
 
 black = team(False)
 white = team(True)
-q_black = queen([1, 5])
+q_black = queen([1, 4])
 # print(q_black.get_cols())
 # print(q_black.get_rows())
-# print(q_black.get_diagonals_right())
-# print(q_black.get_diagonals_left())
+print(q_black.get_diagonals_right())
+print(q_black.get_diagonals_left())
 # print(q_black.get_moves())
 # king1 = king([4,5])
 # king1.get_moves()
@@ -319,5 +331,7 @@ rook1 = rook([1,1])
 # rook1.get_moves()
 bis1 = bishop([4,5])
 # bis1.get_moves()
-print(bis1.diagonals_right())
-print(bis1.diagonals_left())
+# print(bis1.diagonals_right())
+# print(bis1.diagonals_left())
+
+""" 
