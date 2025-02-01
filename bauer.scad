@@ -36,28 +36,32 @@ module head() {
 
 module black_pawn() {
     color("#404040"){
-    base();
-    body();
-    neck();
-    head();
+        resize([9, 9, 15]){
+            base();
+            body();
+            neck();
+            head();
+        }
     }
 }
 
 
 module white_pawn() {
     color("#E0E0E0"){
-    base();
-    body();
-    neck();
-    head();
+        resize([9, 9, 15]){
+            base();
+            body();
+            neck();
+            head();
+        }
     }
 }
 
 
-/**
+
 white_pawn();
 translate([20, 0, 0]) black_pawn();
-*/
+
 
 
 
