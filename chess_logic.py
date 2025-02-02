@@ -93,8 +93,28 @@ def test():
                 
                 c += 1
             d += 1
-    scene = board_main + shifted_corr
+    # moved = move_up_white(9, 2, shifted_corr)
+    # rook_m = move_up_white(0, 5, moved)
+    
+    scene = board_main  + shifted_corr
     return scene
+
+
+def move_up_white(start, num_spaces, rendered_list):
+    spaced = 0
+    for x in range(start):
+        if board_theory[x] != 0:
+            spaced += 1
+            board_theory[x+8*num_spaces] = board_theory[x]
+            board_theory[x] = 0
+            
+            
+    piece = rendered_list[spaced]
+    rendered_list.pop(spaced)
+    rendered_list.insert(spaced, solid.translate([0, 10*num_spaces, 0])(piece))
+    return rendered_list
+    
+    
             
             
 
