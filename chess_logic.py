@@ -2,6 +2,23 @@ import solid
 import solid.utils
 import Chess
 
+"""
+This is the main file of the chess in OpenSCAD project.
+It renders a chessboard with pieces in the starting position.
+The pieces are rendered from the functions in the other files in this directory.
+The positions of the pieces are defined in the chess_logic.py file.
+
+The board is rendered using the checkerboard function from the Schachboard.scad file.
+The pieces are rendered using the functions in the other .scad files.
+The positions of the pieces are defined in a 2 dimensional array in the chess_logic.py file.
+The positions are defined in the algebraic notation (e.g. e4 would be the 4th column and 4th row).
+
+The main function is the fill_board_3d function which is called at the end of this file.
+It loops over the positions array and renders the pieces at the corresponding positions.
+
+the read Fen function is used to read a fen string and return the board state as a 2d array
+"""
+
 board_theory = Chess.read_Fen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
 
 # print(board_theory)
@@ -38,13 +55,13 @@ def fill_board_3d():
             elif board_theory[x] == 17:
                 black[x] = rook.black_rook()
             elif board_theory[x] == 32:
-                white[x] = queen.queen()
+                white[x] = queen.white_queen()
             elif board_theory[x] == 33:
-                black[x] = queen.queen()
+                black[x] = queen.black_queen()
             elif board_theory[x] == 64:
-                white[x] = king.king()
+                white[x] = king.white_king()
             elif board_theory[x] == 65:
-                black[x] = king.king()
+                black[x] = king.black_king()
     
     return board_theory
 
@@ -72,7 +89,7 @@ def fill_board_3d():
 
 
 
-def test():
+def main():
     board_theory = fill_board_3d()
     # print(white)
     start = [0,0,0]
@@ -96,7 +113,7 @@ def test():
     # moved = move_up_white(9, 2, shifted_corr)
     # rook_m = move_up_white(0, 5, moved)
     
-    scene = board_main  + shifted_corr
+    scene = board_main  +  shifted_corr
     return scene
 
 
@@ -122,5 +139,5 @@ def move_up_white(start, num_spaces, rendered_list):
     
 
 
-solid.scad_render_to_file(test(), out)
+solid.scad_render_to_file(main(), out)
 

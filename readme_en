@@ -1,0 +1,37 @@
+This project was originally intended as such:
+
+My plan was to program a chess bot and have two instances compete against each other.
+This game would then run as an animation in openScad.
+
+I started programming the bot and tested the solidpython library.
+Unfortunately I realized today when I tried to create an animation of the movement of a chess piece that it is not possible because each frame alone takes more than 30-40 seconds.
+That's why I'm giving up the project early.
+
+Nevertheless, the program has quite interesting capabilities.
+
+Files:
+
+The Scad files contain the models of the pieces and the output that has to be opened to watch the program.
+The Chess.py file contains the beginnings of the bot and logic for the display.
+The chess_logic.py file contains the solidpython code to display the chessboard in openSCAD.
+
+Methods
+read_fen(str) -> dict[int, int]
+    The string at the beginning of the chess_logic file is FEN notation how this works can be found [here](https://www.chess.com/de/terms/forsyth-edwards-notation-fen), but some of the notations here have errors.
+    Almost every position can be displayed. Not all of them can be displayed because I have not implemented the Roschade and move display.
+    There are also errors with certain combinations where pawns move one square to the left or right.
+
+fill_board_3D() -> dict[int, int]
+    fills the board with instances of the openSCAD type after the read_fen method has assigned the correct values.
+
+main() -> OpenSCAD_OBJECT 
+    executes the fill_board() method.
+    It then translates all objects to a start field.
+    From there, they are moved to the correct row or line using the Board_theory array.
+
+    Optional:
+        move_up_white(start: int, num_spaces: int, rendered_list: lst) -> list[openSCAD_Object]
+            This method moves a figure “intended for white without check” straight forwards for a number of spaces: num_spaces
+            It should get the list shifted_corr in the main() method as input.
+            Every further use requires the list of the method before as input.
+

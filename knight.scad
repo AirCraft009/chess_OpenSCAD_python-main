@@ -32,11 +32,19 @@ module knight_head() {
 
 module white_knight() {
     union() {
-        color("white"){
+        color("#E0E0E0"){
         knight_base();
         knight_head();
         }
     }
 }
+module black_knight(){
+    union() {
+        color("#404040"){
+        knight_base();
+        knight_head();
+        }
+    }
+}    
 
 white_knight();

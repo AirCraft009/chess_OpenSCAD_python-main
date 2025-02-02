@@ -27,14 +27,19 @@ module body(){
 
 module white_bishop(){
     color("white")
-    body(); 
+    resize([8.5,8.5, 17]){
+        body();
+    } 
 }
 
 module black_bishop(){
     color("#404040")
-    body();
+    resize([8.5,8.5, 17]){
+        body();
+    }
 }
-/**
+
+
+
 black_bishop();
 translate([10,0,0])white_bishop();
-*/

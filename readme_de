@@ -1,0 +1,41 @@
+Autor: Musa Allmer
+Datum: 02.02.2025
+
+Dieses Projekt war ursprünglich so gedacht:
+
+Mein Plan war es einen Schachbot zu programmieren und zwei instanzen gegeneinander antreten zu lassen.
+Dieses Spiel würde dann in openScad als Animation laufen.
+
+Ich habe begonnen den Bot zu programmieren und die solidpython library ausgetestet.
+Leider ist mir heute aufgefallen als ich eine animation von der bewegung eines Schachstück zu erstellen, dass es nicht möglich ist da jeder Frame alleine mehr als 30-40 sekunden benötigt.
+deshalb gebe ich  das Projekt frühzeitig ab.
+
+Trotzdem hat das Programm recht interesante fähigkeiten.
+
+Files:
+
+Die Scad files enthalten die Modelle der Figuren und den output der geöffnet werden muss um das Programm zu beobachten.
+Das Chess.py file beinhaltet die Anfänge das Bots sowie logik für die anzeige.
+Das chess_logic.py file beinhaltet den solidpython code um das Schachbrett in openSCAD darzustellen.
+
+Methods
+read_fen(str) -> dict[int, int]
+    Der String am Anfang des chess_logic files ist FEN Notation wie diese Funktioniert ist  [hier](https://www.chess.com/de/terms/forsyth-edwards-notation-fen) zu finden, manche der Notationen haben hier jedoch fehler.
+    So kann beinahe jede Position dargestellt werden. Es können nicht alle dargestell werden, da ich die Roschade sowie Zuganzeige nicht implementiert habe.
+    Auch kommt es bei gewissen Kombinationen zu Fehlern bei denen Bauern um ein Feld nach Links oder Rechts geraten.
+
+fill_board_3D() -> dict[int, int]
+    befüllt das board mit instanzen des openSCAD typ nachdem die read_fen Methode die Richtigen Werte zugewiesen hat.
+
+main() -> OpenSCAD_OBJECT 
+    führt die fill_board() Method aus.
+    Danach translated sie alle objecte auf ein Startfeld.
+    Von dort werden sie mithilfe des Arrays Board_theory auf die Richtige Reihe bzw. Zeile gebracht.
+
+    Optional:
+        move_up_white(start: int, num_spaces: int, rendered_list: lst) -> list[openSCAD_Object]
+            Diese Methode bewegt eine Figur "gedacht für Weiß ohne check" gerade nach vorne für eine Nummer an Feldern: num_spaces
+            Es soll die Liste shifted_corr in der main() Methode als input bekommen.
+            Jede weitere Verwendung benötigt als input  die Liste der Methode davor.
+
+
